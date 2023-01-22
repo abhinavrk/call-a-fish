@@ -16,6 +16,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.js"></script>
     <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+
 </head>
 
 <body>
@@ -29,31 +30,7 @@
 
 
     <div id="chess-board" ></div>
-
-    <script>
-        var game = new Chess();
-
-        // Create a new chess board
-        var board = ChessBoard('chess-board', {
-            position: game.fen(), // Use the FEN from the chess.js game
-            onDrop: function (source, target) {
-                // Make the move in the chess.js game
-                var move = game.move({
-                    from: source,
-                    to: target,
-                    promotion: 'q' // Always promote to a queen
-                });
-
-                // If the move was illegal, take back the piece
-                if (move === null) {
-                    return 'snapback';
-                }
-
-                // Update the board position
-                board.position(game.fen());
-            }
-        });
-    </script>
+    <script src="./chess-game.js"></script>
 
 
 </body>
