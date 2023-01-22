@@ -103,7 +103,7 @@ function startConnection() {
   return peer;
 }
 
-function connectToPeer(id) {
+function connectToPeer(peerid) {
   var peer = new Peer();
 
   peer.on('error', function (err) {
@@ -113,7 +113,7 @@ function connectToPeer(id) {
   peer.on('open', function (id) {
     console.log('Your id is ' + id);
 
-    var conn = peer.connect(id, {
+    var conn = peer.connect(peerid, {
       reliable: true
     });
 
