@@ -1,5 +1,15 @@
 "use strict";
 
+//var wasmSupported = typeof WebAssembly === 'object' && WebAssembly.validate(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00));
+//var stockfish = new Worker(wasmSupported ? 'stockfish.wasm.js' : 'stockfish.js');
+
+//const stockfish = require("stockfish.wasm")
+//var stockfish = new Stockfish();
+//var stockfish = STOCKFISH();
+//var stockfish = new Worker('./stockfish.js');
+//var stockfish = require("stockfish");
+//var stockfish = new Worker();
+
 function createGame() {
   return new Chess();
 }
@@ -51,6 +61,16 @@ function onDrop(game, board, source, target) {
   // Update the board position
   board.position(game.fen());
 
+//    stockfish.postMessage("position fen " + chess.fen());
+//    stockfish.postMessage("go movetime "+3000);  // think for 3000ms
+//    stockfish.onmessage = function(event) {
+//      if (event.data.startsWith("bestmove")) {
+//        var move = event.data.split(" ")[1];
+//        var bestMove = { from: move.slice(0, 2), to: move.slice(2, 4) };
+//        move(bestMove.from, bestMove.to);
+//      }
+//};
+
   // Game over logic
   var gameOver = checkGameOver(game);
     if (gameOver !== 'Game is not over') {
@@ -93,6 +113,7 @@ function startConnection() {
   });
 
   peer.on('connection', function (conn) {
+    console.log('initial_connection_on')
     registerConn(conn, true);
   });
 
@@ -103,7 +124,7 @@ function startConnection() {
   return peer;
 }
 
-function connectToPeer(peerid) {
+function connectToPeer(id_to_connect) {
   var peer = new Peer();
 
   peer.on('error', function (err) {
@@ -111,13 +132,14 @@ function connectToPeer(peerid) {
   });
 
   peer.on('open', function (id) {
-    console.log('Your id is ' + id);
+    console.log('Black, your id is ' + id);
+    console.log('The id to connect is: ' + id_to_connect);
+    console.log("Connection state: "+peer.connectionState);
+    console.log("peer id: "+peer.id);
+    var connection = peer.connect(id_to_connect);
+    console.log("Connection state after connecting: "+ connection.connectionState);
 
-    var conn = peer.connect(peerid, {
-      reliable: true
-    });
-
-    registerConn(conn, false);
+    registerConn(connection, false);
   });
 
 
@@ -129,11 +151,12 @@ function registerConn(conn, isWhite) {
   setupBoardAndGame(isWhite, conn);
 }
 
-function setup(peerid) {
-  if (peerid === undefined) {
+function setup(peerId) {
+  if (peerId === undefined) {  // first person
     startConnection();
-  } else {
-    connectToPeer(peerid);
+  } else {  // second person
+    console.log('trying to connect to peer')
+    connectToPeer(peerId);
   }
 } 
 
