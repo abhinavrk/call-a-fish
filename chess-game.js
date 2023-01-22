@@ -32,22 +32,90 @@ function onDrop(game, board, source, target) {
   board.position(game.fen());
 }
 
-function setup(isWhite) {
+function setupBoardAndGame(isWhite, conn) {
   var game = createGame();
 
   var callback = function (source, target) {
     var whiteToMove = game.turn() === 'w';
-    console.log(game.turn(), isWhite, whiteToMove);
     if (whiteToMove === isWhite) {
       onDrop(game, board, source, target);
+      conn.send(JSON.stringify({
+        'source': source,
+        'target': target,
+        'fen': game.fen()
+      }));
     } else {
-      alert('Not your move!');
+      console.warn('Not your move!');
       return 'snapback';
     }
   }
 
-  var board = createBoard(game, isWhite, callback, 'chess-board');
+  conn.on('data', function (dataJson) {
+    var data = JSON.parse(dataJson);
+    onDrop(game, board, data.source, data.target);
+  });
 
+  var board = createBoard(game, isWhite, callback, 'chess-board');
 }
 
-setup(true);
+function startConnection() {
+  var peer = new Peer();
+
+  peer.on('open', function (id) {
+    console.log(`Your id is ${id}`);
+    alert(`You're white. Share this id with your friend: ${id}`);
+  });
+
+  peer.on('connection', function (conn) {
+    registerConn(conn, true);
+  });
+
+  peer.on('error', function (err) {
+    console.warn(err);
+  });
+
+  return peer;
+}
+
+function connectToPeer(id) {
+  var peer = new Peer();
+
+  peer.on('error', function (err) {
+    console.warn(err);
+  });
+
+  peer.on('open', function (id) {
+    console.log('Your id is ' + id);
+
+    var conn = peer.connect(id, {
+      reliable: true
+    });
+
+    registerConn(conn, false);
+  });
+
+
+  return peer;
+}
+
+function registerConn(conn, isWhite) {
+  window.conn = conn;
+  setupBoardAndGame(isWhite, conn);
+}
+
+function setup(peerid) {
+  if (peerid === undefined) {
+    startConnection();
+  } else {
+    connectToPeer(peerid);
+  }
+} 
+
+function parseAndConnectToPeer() {
+  var peerId = document.getElementById('peerid').value;
+  setup(peerId);
+}
+
+function startNewGame() {
+  setup();
+}
