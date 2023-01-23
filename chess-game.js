@@ -4,13 +4,13 @@ function createGame() {
   return new Chess();
 }
 
-function createBoard(game, isWhite, onDrop, boardId) {
+function createBoard(game, isWhite, onDropFn, boardId) {
   return new ChessBoard(boardId, {
     position: game.fen(),
     draggable: true,
     droffOffBoard: 'snapback',
     orientation: isWhite ? 'white' : 'black',
-    onDrop: onDrop,
+    onDrop: onDropFn,
     sparePieces: true,
   });
 }
