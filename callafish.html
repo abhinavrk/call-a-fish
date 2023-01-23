@@ -13,6 +13,7 @@
     <!-- Style -->
     <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
 
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.js"></script>
     <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
@@ -22,30 +23,31 @@
 <body>
     <div id="wrapper">
         <div id="blogtitle">
-            <a href="./">Call a Fish</a>
+            Call a Fish
             <div id="subtitle">For when you need some help beating your friend playing chess</div>
         </div>
-
     </div>
 
+    <br>
+    <br>
 
+    <em id="winstate"></em>
     <div id="chess-board" style="width: 400px"></div>
 
     <br>
     <br>
-    <br>
-    <br>
-    <br>
 
     <div>
-    Enter peer-id: <input type="text" id="peerid">
-    <input type="submit" onclick="parseAndConnectToPeer()">
+        Start a new game as white: <input type="submit" onclick="startNewGame()">
+        <div id="instructions"></div>
+        <br>
+        <br>
     </div>
-      
+
     <div>
-        Start a new game: <input type="submit" onclick="startNewGame()">
+        Connect to an existing game as black: <input type="text" id="peerid">
+        <input type="submit" onclick="parseAndConnectToPeer()">
     </div>
- 
 
     <script src="./chess-game.js"></script>
 </body>

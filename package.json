@@ -1,0 +1,26 @@
+{
+  "name": "call-a-fish",
+  "version": "1.0.0",
+  "description": "For when you need stockfish to help a brother out",
+  "main": "chess-game.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhinavrk/call-a-fish.git"
+  },
+  "contributors": [
+    "Abhinav Ramakrishnan",
+    "Emil Kerimov"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/abhinavrk/call-a-fish/issues"
+  },
+  "homepage": "https://github.com/abhinavrk/call-a-fish#readme",
+  "devDependencies": {
+    "eslint": "^8.32.0",
+    "eslint-config-google": "^0.14.0"
+  }
+}
